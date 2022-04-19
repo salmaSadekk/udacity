@@ -2,6 +2,7 @@ import express from "express";
 import sharp from 'sharp' ;
 import {promises as fspromises } from 'fs' ;
 import path from 'path';
+import fs from 'fs' ;
 
 
 async function resize   (path : string  , filename :string, height :string , width :string  )  {
@@ -21,12 +22,24 @@ images.get('/images', async (req, res) => {
     const file  = req.query.filename ; 
    const width = req.query.width ; 
    const height =req.query.height ; 
+  
 
-   //res.send('images resize route');
+  // if (file!= null && width!= null && !isNaN(Number(width) ) && !isNaN(Number(height) ) && height != null) {
+    if (file== null || width== null || height == null) {
+      res.send("missing parameter ")
+    }
 
-   //if (file!= null && width!= null && height != null)
-   
-
+  else    if ( isNaN(Number(width) ) || isNaN(Number(height) )) {
+      res.send(" size parametres [width / height] in wrong format. should be Numbers")
+    }
+    
+    else if (!fs.existsSync('./images/' + file + ".jpg" )) {
+      res.send("404 not found. The resource you are looking for doesn't exist")
+    }
+    
+   else{
+  console.log( isNaN(Number(width) ) )
+  
     var path_ = './images/' + file + ".jpg";
 
     console.log(path_)
@@ -37,8 +50,7 @@ images.get('/images', async (req, res) => {
    console.log(path.resolve(__dirname, '../../../resizedImage/' + file + "_" + height + "_"  + width  + ".jpg"))
     
    await res.sendFile (path.resolve(__dirname, '../../../resizedImage/' + file + "_" + height + "_"  + width  + ".jpg") )
-  
-
+}
    
    
 
@@ -50,9 +62,6 @@ images.get('/images', async (req, res) => {
 
     }
    
-   //console.log(path)
-   
-//resize(path ) ;
 
 
 
