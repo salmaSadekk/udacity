@@ -40,65 +40,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
 var fs_1 = __importDefault(require("fs"));
-function resize(path, filename, height, width) {
-    return __awaiter(this, void 0, void 0, function () {
-        var info;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, sharp_1.default)(path)
-                        .resize(Number(width), Number(height))
-                        .toFile("./resizedImage/" + filename + "_" + height + "_" + width + ".jpg")];
-                case 1:
-                    info = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
+var resize_1 = __importDefault(require("../../function/resize"));
 var images = express_1.default.Router();
 images.get('/images', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var file, width, height, path_, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 7, , 8]);
+                _a.trys.push([0, 6, , 7]);
                 file = req.query.filename;
                 width = req.query.width;
                 height = req.query.height;
                 if (!(file == null || width == null || height == null)) return [3 /*break*/, 1];
-                res.send("missing parameter ");
-                return [3 /*break*/, 6];
+                res.send('missing parameter ');
+                return [2 /*return*/];
             case 1:
                 if (!(isNaN(Number(width)) || isNaN(Number(height)))) return [3 /*break*/, 2];
-                res.send(" size parametres [width / height] in wrong format. should be Numbers");
-                return [3 /*break*/, 6];
+                res.send(' size parametres [width / height] in wrong format. should be Numbers');
+                return [2 /*return*/];
             case 2:
-                if (!!fs_1.default.existsSync('./images/' + file + ".jpg")) return [3 /*break*/, 3];
+                if (!!fs_1.default.existsSync('./images/' + file + '.jpg')) return [3 /*break*/, 3];
                 res.send("404 not found. The resource you are looking for doesn't exist");
-                return [3 /*break*/, 6];
+                return [2 /*return*/];
             case 3:
-                console.log(isNaN(Number(width)));
-                path_ = './images/' + file + ".jpg";
-                console.log(path_);
-                console.log("testt");
-                return [4 /*yield*/, resize(path_, file, height, width)];
+                path_ = './images/' + file + '.jpg';
+                if (fs_1.default.existsSync('./resizedImage/' + file + '_' + height + '_' + width + '.jpg')) {
+                    res.sendFile(path_1.default.resolve(__dirname, '../../../resizedImage/' + file + '_' + height + '_' + width + '.jpg'));
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, (0, resize_1.default)(path_, file, height, width)];
             case 4:
                 _a.sent();
-                console.log(path_1.default.resolve(__dirname, '../../../resizedImage/' + file + "_" + height + "_" + width + ".jpg"));
-                return [4 /*yield*/, res.sendFile(path_1.default.resolve(__dirname, '../../../resizedImage/' + file + "_" + height + "_" + width + ".jpg"))];
-            case 5:
-                _a.sent();
-                _a.label = 6;
-            case 6: return [3 /*break*/, 8];
-            case 7:
+                res.sendFile(path_1.default.resolve(__dirname, '../../../resizedImage/' + file + '_' + height + '_' + width + '.jpg'));
+                _a.label = 5;
+            case 5: return [3 /*break*/, 7];
+            case 6:
                 err_1 = _a.sent();
                 console.log(err_1);
-                console.log("saaad");
-                return [3 /*break*/, 8];
-            case 8: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
     });
 }); });

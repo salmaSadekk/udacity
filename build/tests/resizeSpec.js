@@ -39,51 +39,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var supertest_1 = __importDefault(require("supertest"));
-var __1 = __importDefault(require(".."));
-var request = (0, supertest_1.default)(__1.default);
-describe('endpoint test /api/images', function () {
-    it(' endpoint: get /api/images with all parameters [ filename, height,width]', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
+var resize_1 = __importDefault(require("../function/resize"));
+var promisify = require('util').promisify;
+var fs_1 = __importDefault(require("fs"));
+describe('test that the file gets created', function () {
+    it('testing that file gets created', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images?filename=fjord&width=200&height=233')];
+                case 0:
+                    if (fs_1.default.existsSync('./resizedImage/palmtunnel_200_200.jpg')) {
+                        fs_1.default.unlinkSync('./resizedImage/palmtunnel_200_200.jpg');
+                    }
+                    return [4 /*yield*/, (0, resize_1.default)('./images/palmtunnel.jpg', 'palmtunnel', "200", "200")];
                 case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(200);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it(' endpoint: get /api/images with parameters [ filename ,width]', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images?filename=fjord&width=200').expect('missing parameter ')];
-                case 1:
-                    response = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it(' endpoint: get /api/images with wrong parameter formats for width and height[width , height]', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images?filename=fjord&width=200&height=stester').expect(' size parametres [width / height] in wrong format. should be Numbers')];
-                case 1:
-                    response = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it(' endpoint: get /api/images with filename not existing', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/api/images?filename=test&width=200&height=200').expect("404 not found. The resource you are looking for doesn't exist")];
-                case 1:
-                    response = _a.sent();
+                    _a.sent();
+                    res = fs_1.default.existsSync('./resizedImage/palmtunnel_200_200.jpg');
+                    expect(res).toBeTrue();
                     return [2 /*return*/];
             }
         });
