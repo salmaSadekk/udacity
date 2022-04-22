@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { promises as fspromises } from 'fs';
 import path from 'path';
 import fs from 'fs';
@@ -7,7 +7,7 @@ import resize from '../../function/resize';
  
 
 const images = express.Router();
-images.get('/images', async (req, res) => {
+images.get('/images', async (req : Request, res : Response)  :Promise<void>=> {
   try {
     const file = req.query.filename;
     const width = req.query.width;

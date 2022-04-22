@@ -1,15 +1,15 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { resolve } from 'path';
 import routes from './routes/routes';
 
 const app = express();
 const port = 3000;
 
-app.use('/api', routes , (req, res)=>{
+app.use('/api', routes , (req : Request, res : Response) : void=>{
   
   res.send('Image processing application');
 });
-app.listen(port, () => {
+app.listen(port, (): void => {
   console.log(`server started at localhost:${port}`);
 });
 /*

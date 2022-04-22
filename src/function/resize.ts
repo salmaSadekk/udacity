@@ -6,7 +6,7 @@ const resize =  async  (
     filename: string,
     height: string,
     width: string
-  ) => {
+  ):Promise<void> => {
   
     if(!fs.existsSync('./resizedImage/')) {
       fs.mkdirSync('./resizedImage/')
